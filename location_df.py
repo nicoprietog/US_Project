@@ -15,6 +15,10 @@ for i in range(1, aisle_num + 1):
     max_pallets = (20 if i <= 15 else (40 if i > 15 and i <= 40 else 48))
     #Max number of pallets stacked, depends of the aisle:
     max_height = (2 if i <= 15 else (4 if i > 15 and i <= 40 else 2))
+    """
+    #Type of product:
+    type_product = ("Coffee Makers" if i <= 15 else ("Coffee Pots" if i > 15 and i <= 40 else "spare parts"))
+    """
     #Random code:
     random_confirmation_code = 0
     #Create a list with the last 4 data:
