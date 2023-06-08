@@ -31,7 +31,7 @@ def info():
     #Dicttionary of Quantity of products:
     quantity_ordered_dict = [int(input(f"Quantity of Product {i+1}: ")) for i in iterations_num]
     #Create id dictionary:
-    id_dict = [i + 1 for i in iterations_num]
+    id_dict = 0
     #Create date dictionary:
     date_today = datetime.date.today()
     formatted_date = date_today.strftime("%m-%d-%Y")
@@ -80,5 +80,6 @@ while more_orders_state:
         print("Thanks for your order, your products will arrive soon to the Wharehouse. ")
         more_orders_state = False
 
+
 #Save the history of orders in a new file:
-orders_df_history.to_csv("Orders_history.csv",mode = "a", header = False, index=False)
+orders_df_history.to_csv("Orders_history.csv",mode ="a", header = False , index=False)
