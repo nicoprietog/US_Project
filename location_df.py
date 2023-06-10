@@ -4,7 +4,7 @@ import string
 
 #Generate columns names:
 aisle_num = 50
-columns_names = ['aisle ' + str(i) for i in range(1,aisle_num+1)]
+columns_names = ['aisle' + str(i) for i in range(1,aisle_num+1)]
 
 # Generate data for the lists:
 list_data = []
@@ -15,8 +15,10 @@ for i in range(1, aisle_num + 1):
     max_pallets = (20 if i <= 15 else (40 if i > 15 and i <= 40 else 48))
     #Max number of pallets stacked, depends of the aisle:
     max_height = (2 if i <= 15 else (4 if i > 15 and i <= 40 else 2))
+    #random code:
+    random_confirmation_code = []
     #Create a list with the last 4 data:
-    list_data.append([actual_number_pallets,max_pallets,max_height])#random_confirmation_code])
+    list_data.append([actual_number_pallets,max_pallets,max_height,random_confirmation_code])
 # Create de DataFrame from the tuple_data:
 initial_locations_df = pd.DataFrame([list_data], columns=columns_names)
 #Add the extra locations per aisle:
@@ -24,7 +26,7 @@ num_of_locations_per_aisle = 20
 final_locations_df = pd.concat([initial_locations_df] * (num_of_locations_per_aisle), ignore_index=True)
 
 #Create a function to give a random code to every location available:
-"""
+
 def random_code(lst):
     #Create the random letters and numbers, then shuffle them (Taken from ChatGPT):
     random_letters = random.sample(string.ascii_letters, 3)
@@ -36,4 +38,3 @@ def random_code(lst):
 
 #Apply the function to every column:
 final_locations_df = final_locations_df.applymap(lambda x: random_code(x))
-"""
