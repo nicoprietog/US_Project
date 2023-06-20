@@ -1,6 +1,8 @@
 import pandas as pd
 from location_df import final_locations_df as locations
 import random
+import functools
+
 
 # Generate a copy  of Locations:
 locations_copy = locations.copy()
@@ -18,6 +20,10 @@ orders["check"] = "n"
 # Get an array with the type of products:
 type_products = list(orders["type"])
 
+# Generate a list with the quantities of orders:
+orders_copy = orders.copy()
+orders_quantity = orders_copy["quantity"].tolist()
+
 
 # Def a function to generate an array with two variables: a random location, and a random aisle. Those depends of the type of product to be storaged:
 def gen_random_location(type_products, locations_copy):
@@ -34,32 +40,38 @@ def gen_random_location(type_products, locations_copy):
         random_locations.append(rand_location)
     return random_locations
 
+#This is a function that brings the free spaces in the random previous locations generated:
+def gen_free_spaces(random_locations):
+    spaces = []
+    for i in random_locations:
+        # Here I take the coordinates of each random location, I divided by rows and columns:
+        row = i[0]
+        col = i[1]
+        # Find the total amount of free spaces at the random location (second number minus the first):
+        available_spaces = locations_copy.at[row, f"aisle{col}"][1] - locations_copy.at[row, f"aisle{col}"][0]
+        spaces.append(available_spaces)
+    return(spaces)
+def gen_sum_spaces(orders_quantity):
+    sum_spaces = functools.reduce(lambda x, y: x + y, orders_quantity)
+    return sum_spaces
 
-# Call the function to generate random coordinates:
+
+# Call the functions:
 random_locations = gen_random_location(type_products, locations_copy)
-# Generate a list with the quantities of orders:
-orders_quantity = orders["quantity"].tolist()
+spaces = gen_free_spaces(random_locations)
+sum_spaces = gen_sum_spaces(orders_quantity)
 
-print("These are the random locations: ",random_locations)
 
-changes = []
-for i in random_locations:
-    #Here I take the coordinates of each random location, I divided by rows and columns:
-    row = i[0]
-    col = i[1]
-    #Find the total amount of free spaces at the random location (second number minus the first):
-    available_spaces_location = locations_copy.at[row, f"aisle{col}"][1] - locations_copy.at[row, f"aisle{col}"][0]
-    #How many pallets needs to be allocated:
-    pallets_to_allocate = orders_quantity[random_locations.index(i)]
-    #Logical function to allocate pallets:
-    if available_spaces_location > 0:
-        #In this case, there´s much pallets than the spaces available:
-        if pallets_to_allocate > available_spaces_location:
-            changes.append([row,col,available_spaces_location])
-            pallets_to_allocate -= available_spaces_location
-        #Here, there are just a few pallets, less than the total spaces availables:
-        elif pallets_to_allocate < available_spaces_location:
-            changes.append([row, col,pallets_to_allocate])
-print(changes)
+
+while sum_spaces > 0:
+    mix_spaces = list(zip(orders_quantity, spaces, random_locations))
+    for i in mix_spaces:
+        if i[1] > 0:
+            if
+
+
+
+
+
 
 
