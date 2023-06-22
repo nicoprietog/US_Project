@@ -57,20 +57,69 @@ def gen_sum_spaces(orders_quantity):
 
 
 # Call the functions:
-random_locations = gen_random_location(type_products, locations_copy)
-spaces = gen_free_spaces(random_locations)
+def call_functions():
+    random_locations = gen_random_location(type_products, locations_copy)
+    spaces = gen_free_spaces(random_locations)
+    sum_spaces = gen_sum_spaces(orders_quantity)
+    return random_locations, spaces, sum_spaces
+
+#Call function:
+random_locations, spaces, sum_spaces = call_functions()
+
+"""
+#esto es una prueba:
+print("antes",orders_quantity)
+print("antes",sum_spaces)
+orders_quantity[0] = 0
 sum_spaces = gen_sum_spaces(orders_quantity)
+print("despues",orders_quantity)
+print("despues",sum_spaces)
+"""
+
+
+#create a DF where every changes will be added:
+changes_to_location = pd.DataFrame(columns = ["location","aisle","changes"])
+
+#while sum_spaces > 0:
+mix_spaces = list(zip(orders_quantity, spaces, random_locations))
+
+for i in mix_spaces:
+    #Here i can check if there are spaces available into the location:
+    if i[1] > 0:
+        #Here i check if the number of pallets to be allocated its grater than the number of available spaces:
+        if i[0] > i[1]:
+            #This next line of code its really dont necesary becouse in real life the driver need to go to the location and see the code with his own eyes just to confirm he´s doing things right:
+            random_code = locations_copy.at[i[2][0],f"aisle{i[2][1]}"][3]
+            print(f"Please go to location {i[2][0]} in aisle {i[2][1]} to allocate " )
+            print("The random code is: ",random_code)
+            #Ask the code to the driver:
+            random_answer_code = input("Please enter the confirmation code of given location:")
+            if random_code == random_answer_code:
+                #change the main DF to enter de product into the spaces, turn the actual number of pallets into the max allowed:
+                locations_copy.at[i[2][0],f"aisle{i[2][1]}"][0] = locations_copy.at[i[2][0],f"aisle{i[2][1]}"][1]
+                #Now here the orders quantity decrease in to the number of
+                orders_quantity[orders_quantity.index(i[0])] = orders_quantity[orders_quantity.index(i[0])] - i[1]
+                print(orders_quantity[orders_quantity.index(i[0])])
 
 
 
-while sum_spaces > 0:
-    mix_spaces = list(zip(orders_quantity, spaces, random_locations))
-    for i in mix_spaces:
-        if i[1] > 0:
-            if
 
 
-
+                #Now I need to append to my DF the changes that i did:
+                changes_append = {"location":i[2][0],"aisle": i[2][1],"changes":i[1]}
+                changes_to_location = changes_to_location.append(changes_append,ignore_index=True)
+                #ESTE ES DE PRUEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:
+                print("Antes: ",sum_spaces)
+                #Here I check again the Sum_spaces:
+                sum_spaces = gen_sum_spaces(orders_quantity)
+                #ESTE ES DE PRUEBA TAMBIEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN:
+                print("Despues: ", sum_spaces)
+            else:
+                print("The code you provide is not the correct")
+    elif i[1] == 0:
+        random_locations = gen_random_location(type_products, locations_copy)
+        spaces = gen_free_spaces(random_locations)
+        sum_spaces = gen_sum_spaces(orders_quantity)
 
 
 
