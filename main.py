@@ -9,6 +9,8 @@ locations_copy = locations.copy()
 
 # Open the orders history from the CSV file:
 orders = pd.read_csv("Orders_history.csv")
+# Open the changes history from the CSV file:
+changes = pd.read_csv("changes_history.csv")
 
 # Rename the ID column with unique data:
 orders_rows = list(range(0, orders.shape[0]))
@@ -55,7 +57,6 @@ def gen_sum_spaces(orders_quantity):
     sum_spaces = functools.reduce(lambda x, y: x + y, orders_quantity)
     return sum_spaces
 
-
 # Call the functions:
 def call_functions():
     random_locations = gen_random_location(type_products, locations_copy)
@@ -79,18 +80,18 @@ print("despues",sum_spaces)
 
 #create a DF where every changes will be added:
 changes_to_location = pd.DataFrame(columns = ["location","aisle","changes"])
-
 #while sum_spaces > 0:
 mix_spaces = list(zip(orders_quantity, spaces, random_locations))
-
+#Here I create an count that will be increase one by one to know which iterable number im in:
+count = 0
 for i in mix_spaces:
     #Here i can check if there are spaces available into the location:
     if i[1] > 0:
         #Here i check if the number of pallets to be allocated its grater than the number of available spaces:
         if i[0] > i[1]:
-            #This next line of code its really dont necesary becouse in real life the driver need to go to the location and see the code with his own eyes just to confirm he´s doing things right:
             random_code = locations_copy.at[i[2][0],f"aisle{i[2][1]}"][3]
             print(f"Please go to location {i[2][0]} in aisle {i[2][1]} to allocate " )
+            # This next line of code its really dont necesary becouse in real life the driver need to go to the location and see the code with his own eyes just to confirm he´s doing things right:
             print("The random code is: ",random_code)
             #Ask the code to the driver:
             random_answer_code = input("Please enter the confirmation code of given location:")
@@ -98,28 +99,32 @@ for i in mix_spaces:
                 #change the main DF to enter de product into the spaces, turn the actual number of pallets into the max allowed:
                 locations_copy.at[i[2][0],f"aisle{i[2][1]}"][0] = locations_copy.at[i[2][0],f"aisle{i[2][1]}"][1]
                 #Now here the orders quantity decrease in to the number of
-                orders_quantity[orders_quantity.index(i[0])] = orders_quantity[orders_quantity.index(i[0])] - i[1]
-                print(orders_quantity[orders_quantity.index(i[0])])
-
-
-
-
-
-                #Now I need to append to my DF the changes that i did:
-                changes_append = {"location":i[2][0],"aisle": i[2][1],"changes":i[1]}
-                changes_to_location = changes_to_location.append(changes_append,ignore_index=True)
-                #ESTE ES DE PRUEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:
-                print("Antes: ",sum_spaces)
-                #Here I check again the Sum_spaces:
+                orders_quantity[count] = i[0]-i[1]
+                count += 1
+                #Running again the function to know the spaces
                 sum_spaces = gen_sum_spaces(orders_quantity)
-                #ESTE ES DE PRUEBA TAMBIEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN:
-                print("Despues: ", sum_spaces)
+                #Make a resum to show to the driver:
+                print(f"You just allocated {i[1]} pallets")
+                continue_allocation = input("Press [1] to continue, [2] for stop.")
+                # Now I need to append to my DF the changes that i did:
+                changes_append = {"location": i[2][0], "aisle": i[2][1], "changes": i[1]}
+                changes_to_location = changes_to_location._append(changes_append, ignore_index=True)
+                #Ask if the driver wants to continue moving pallets:
+                if continue_allocation == 1:
+                    continue
+                else:
+                    break
             else:
                 print("The code you provide is not the correct")
-    elif i[1] == 0:
-        random_locations = gen_random_location(type_products, locations_copy)
-        spaces = gen_free_spaces(random_locations)
-        sum_spaces = gen_sum_spaces(orders_quantity)
+    else:
+        print("ahi vamos")
+
+#Add the changes to a csv file:
+print(changes_to_location)
+
+
+#Save the history of orders in a new file:
+changes_to_location.to_csv("changes_history.csv",mode ="a", header = False , index=False)
 
 
 
