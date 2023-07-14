@@ -6,16 +6,88 @@ orders_dict = {
     "id": [],
     "date": [],
     "name": [],
+    "last_name": [],
+    "email": [],
+    "city": [],
+    "Company_type": [],
+    "kind": [],
     "type": [],
     "product": [],
     "quantity": []}
-#This will be the DataFrame that save all orders in time:
-orders_df_history = pd.DataFrame(columns=["id", "date", "name", "product", "quantity"])
 
-#Function to ask information to the user:
+#This will be the DataFrame that save all orders in time:
+orders_df_history = pd.DataFrame(columns=["id","date""name","last_name","email","city","kind","type","product","quantity","Company_type"])
+
+#Here i´ll ask what´s the personal user information is:
+print("To continue, please provide your personal information.")
+date_today = datetime.date.today()
+name_order = input("Please provide your name: ")
+last_name = input("Please enter your last name: ")
+id = input("Please provide your Id: ")
+email = input("please enter your email: ")
+city = input("Please provide your location City")
+company_type = input("Please enter the type of company you work for. If you don't belong to any company, enter the word -Self-. ")
+
+
+
+
+#Here I´ll ask information about what the user needs:
+active_purchase = True
+while active_purchase:
+    #Here I ask the information about the product:
+    kind_product = int(input("Please insert the code number  corresponding to the type of product you wish to purchase.: Coffee Makers[1], Coffee Pots[2], spare parts[3]"))
+    print(("The available products in the store are: "),("Drip Coffee Maker[1], Espresso Machine[2], French Press[3], Single Serve Coffee Maker[4], Pour Over Coffee Maker[5]") if type_product == 1 else (("Espresso[1], Cappuccino[2], Latte[3], Americano[4], Macchiato[5], Mocha[6], Flat White[7], Affogato[8], Irish Coffee[9]") if type_product == 2 else ("Filter Basket[1], Water Tank[2], Portafilter[3], Grinder Burrs[4]")))
+    type_product = int(input("Please select the code number corresponding the type of product you want to buy: "))
+    q_product = int(input("How many units do you need?" ))
+
+
+
+    #Save the actual order into the DF:
+    orders_dict["id"].append(id)
+    orders_dict["date"].append(date_today)
+    orders_dict["name"].append(name_order)
+    orders_dict["last_name"].append(last_name)
+    orders_dict["email"].append(email)
+    orders_dict["city"].append(city)
+    orders_dict["kind"].append(kind_product)
+    orders_dict["type"].append(type_product)
+    orders_dict["product"] =
+    orders_dict["quantity"] =
+
+
+
+
+
+
+
+    status_order = input("You want to place another order?: Yes[1] No[2]")
+    if status_order == 1:
+        continue
+    elif status_order == 2:
+        active_purchase = False
+
+
+
+
+
+
+#Here are gonna be saved the answers of the user:
+    orders_dict["id"] = id_dict
+    orders_dict["date"] = date_dict
+    orders_dict["name"] = name_dict
+    orders_dict["last_name"] = last_name_dict
+    orders_dict["email"] = email_dict
+    orders_dict["city"] = city_dict
+    orders_dict["type"] = type_dict
+    orders_dict["product"] = products_ordered_dict
+    orders_dict["quantity"] = quantity_ordered_dict
+
+
+
+
 def info():
-    print("Welcome,to continue with your order, notice our available kind of products:")
-    #This is gonna be important, the different type of product in the warehouse:
+    print("Welcome,to continue please enter your information:")
+    #This shows the different type of product in the warehouse:
     type_product = int(input("Select the number: Coffee Makers[1], Coffee Pots[2], spare parts[3]"))
     print(("The available products are: "),("Drip Coffee Maker[1], Espresso Machine[2], French Press[3], Single Serve Coffee Maker[4], Pour Over Coffee Maker[5]") if type_product == 1 else (("Espresso[1], Cappuccino[2], Latte[3], Americano[4], Macchiato[5], Mocha[6], Flat White[7], Affogato[8], Irish Coffee[9]") if type_product == 2 else ("Filter Basket[1], Water Tank[2], Portafilter[3], Grinder Burrs[4]")))
     num_products = int(input("How many diferent products you want to order?: "))
