@@ -16,10 +16,14 @@ CREATE TABLE `us_project`.`user` (
 #I can save here the information about the orders that a user can make:
 CREATE TABLE `us_project`.`orders` (
   `orders_id` INT NOT NULL,
-  `user_id` INT NOT NULL,
   `date` TIMESTAMP NOT NULL,
-  `product_id` INT NOT NULL,
-  `type_product_id` INT NOT NULL,
+  `name` VARCHAR(20) NOT NULL,
+  `last_name` VARCHAR(20) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `city` VARCHAR(20) NOT NULL,
+  `company_type` VARCHAR(20) CHARACTER SET 'armscii8' NOT NULL,
+  `kind` INT NOT NULL,
+  `type` INT NOT NULL,
   `quantity` INT NOT NULL,
   PRIMARY KEY (`orders_id`));
 
