@@ -15,10 +15,11 @@ CREATE TABLE `us_project`.`user` (
 # 2)Now, the table Orders:
 #I can save here the information about the orders that a user can make:
 CREATE TABLE `us_project`.`orders` (
-  `orders_id` INT NOT NULL,
+  `id` INT NOT NULL,
   `date` TIMESTAMP NOT NULL,
   `name` VARCHAR(20) NOT NULL,
   `last_name` VARCHAR(20) NOT NULL,
+  `id_buyer` INT NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `city` VARCHAR(20) NOT NULL,
   `company_type` VARCHAR(20) CHARACTER SET 'armscii8' NOT NULL,
