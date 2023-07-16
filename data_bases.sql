@@ -68,39 +68,3 @@ ADD CONSTRAINT `orders_type_product`
 
 
 #You can check in .idea/Reverse_engineer_orders.jpg the graphical representation of the currently created databases.
-
-
-
-#CHANGES TO ORDERS TABLE:
-  
-ALTER TABLE `us_project`.`orders` 
-DROP FOREIGN KEY `orders_product`,
-DROP FOREIGN KEY `orders_type_product`,
-DROP FOREIGN KEY `orders_user`;
-ALTER TABLE `us_project`.`orders` 
-ADD COLUMN `company_type` VARCHAR(15) NOT NULL AFTER `city`,
-ADD COLUMN `kind` INT NOT NULL AFTER `company_type`,
-ADD COLUMN `type` INT NOT NULL AFTER `kind`,
-CHANGE COLUMN `user_id` `date` TIMESTAMP NOT NULL ,
-CHANGE COLUMN `date` `name` VARCHAR(12) NOT NULL ,
-CHANGE COLUMN `product_id` `last_name` VARCHAR(12) NOT NULL ,
-CHANGE COLUMN `type_product_id` `email` VARCHAR(30) NOT NULL ,
-CHANGE COLUMN `quantity` `city` VARCHAR(10) NOT NULL ;
-ALTER TABLE `us_project`.`orders` 
-ADD CONSTRAINT `orders_product`
-  FOREIGN KEY (`last_name`)
-  REFERENCES `us_project`.`product` (`product_id`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE,
-ADD CONSTRAINT `orders_type_product`
-  FOREIGN KEY (`email`)
-  REFERENCES `us_project`.`type_product` (`type_product_id`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE,
-ADD CONSTRAINT `orders_user`
-  FOREIGN KEY (`date`)
-  REFERENCES `us_project`.`user` (`user_id`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE;
-
-
