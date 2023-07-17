@@ -43,6 +43,19 @@ CREATE TABLE `us_project`.`type_product` (
   `type` VARCHAR(20) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`type_product_id`));
 
+# 5) This table save the status of the allocated orders: 
+CREATE TABLE `us_project`.`to_allocate` (
+  `id_allocate` INT NOT NULL AUTO_INCREMENT,
+  `id_orders` INT NOT NULL,
+  `allocated` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_allocate`),
+  UNIQUE INDEX `id_allocate_UNIQUE` (`id_allocate` ASC) VISIBLE,
+  INDEX `id_order_idx` (`id_orders` ASC) VISIBLE,
+  CONSTRAINT `allocate_order`
+    FOREIGN KEY (`id_orders`)
+    REFERENCES `us_project`.`orders` (`id_orders`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
 #Now, I need to stablished the relations betewen the keys in my tables:
 ALTER TABLE `us_project`.`orders` 
@@ -66,6 +79,7 @@ ADD CONSTRAINT `orders_type_product`
   REFERENCES `us_project`.`type_product` (`type_product_id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+
 
 
 #You can check in .idea/Reverse_engineer_orders.jpg the graphical representation of the currently created databases.
