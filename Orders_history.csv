@@ -1,6 +1,4 @@
-id,date,name,product,quantity,type
-0,06-05-2023,nico,2,234,1.0
-0,06-05-2023,nico,3,235,2
-0,06-06-2023,jey,3,325,3
-0,06-14-2023,niko,2,35,3.0
-0,06-14-2023,niko,3,356,3.0
+id,date,name,last_name,email,city,company_type,kind,type,quantity
+232424,2023-07-15,nico,prieto,nicolas@gmail.com,trenton,self,2,4,2123
+34353,2023-07-15,nestor,gonzalez,nestor@gonzalez,houston,self,1,2,100
+232452,2023-07-15,ana,vidales,ana@vidales.com,mosquera,supershop,1,1,23

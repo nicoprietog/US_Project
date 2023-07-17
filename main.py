@@ -2,10 +2,44 @@ import pandas as pd
 from location_df import final_locations_df as locations
 import random
 import functools
-
+import pymysql
 
 # Generate a copy  of Locations:
 locations_copy = locations.copy()
+
+#Conect to SQL data base:
+db_user = "root"
+db_password = "Nicoroller123*"
+db_host = "127.0.0.1"
+db_port = "3306"
+db_name = "us_project"
+table_name = "orders"
+
+conn = pymysql.connect(
+    user=db_user,
+    password=db_password,
+    host=db_host,
+    port=int(db_port),
+    database=db_name)
+
+cursor = conn.cursor()
+query = 'SELECT * FROM orders'
+cursor.execute(query)
+columns = [col[0] for col in cursor.description]
+#Create the DatFrame:
+orders_df = pd.DataFrame(cursor.fetchall(), columns=columns)
+#close conections:
+cursor.close()
+conn.close()
+
+print(orders_df)
+
+
+
+
+
+
+
 
 # Open the orders history from the CSV file:
 orders = pd.read_csv("Orders_history.csv")

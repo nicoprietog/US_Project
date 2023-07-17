@@ -9,7 +9,7 @@ columns_names = ['aisle' + str(i) for i in range(1,aisle_num+1)]
 # Generate data for the first Data Frame:
 list_data = []
 
-#Add info into list_data:
+#Add info into list_data, the data depends the aisle in the loop:
 for i in range(1, aisle_num + 1):
     #Actual number of pallets:
     actual_number_pallets = 0
@@ -28,7 +28,6 @@ initial_locations_df = pd.DataFrame([list_data], columns=columns_names)
 #Add the extra rows, being it the locations per aisle:
 num_of_locations_per_aisle = 20
 final_locations_df = pd.concat([initial_locations_df] * (num_of_locations_per_aisle), ignore_index=True)
-print(final_locations_df)
 
 #Create a function to give a random code to every location available:
 def random_code(lst):
