@@ -68,4 +68,5 @@ ADD CONSTRAINT `orders_type_product`
   ON UPDATE CASCADE;
 
 
+
 #You can check in .idea/Reverse_engineer_orders.jpg the graphical representation of the currently created databases.
