@@ -4,9 +4,6 @@ import random
 import functools
 import pymysql
 
-# Generate a copy  of Locations:
-locations_copy = locations.copy()
-
 #Conect to SQL data base:
 db_user = "root"
 db_password = "Nicoroller123*"
@@ -26,17 +23,110 @@ cursor = conn.cursor()
 query = 'SELECT * FROM orders'
 cursor.execute(query)
 columns = [col[0] for col in cursor.description]
-#Create the DatFrame:
 orders_df = pd.DataFrame(cursor.fetchall(), columns=columns)
-#close conections:
 cursor.close()
 conn.close()
 
-print(orders_df)
+# Generate a copy  of Locations:
+locations_copy = locations.copy()
+
+
+#Select only the orders in a list that are not allocated:
+non_allocated_orders = orders_df.loc[orders_df["allocated"] == "N", "id_orders"].tolist()
+print(non_allocated_orders)
+
+#Create a DF where its gonna be saved the changes in locations storage:
+pallet_movements = { "order_id": [],
+                     "aisle": [],
+                     "location": [],
+                     "pallets_in": [],
+                     "pallets_out": []}
+
+#Here´s gonna start the loop that will allocate the pallet into the warehouse:
+spaces = True
+while spaces:
+    for order in non_allocated_orders:
+        #This will show which is the kind of the first number:
+        kind_order = int(orders_df.loc[orders_df["id_orders"] == order,"kind"].tolist()[0])
+        #Here I have the list of the aisles where the pallet can be allocated (The list of aisles in this line of code will be different from the one established in the Location_df file; this is to correctly deliver the data to the iloc function):
+        available_aisles = ((list(range(0, 15)) if kind_order == 1 else (list(range(15, 40)) if kind_order == 2 else (list(range(40, 50)) if kind_order == 3 else print("This kind of product do not exist")))))
+        # Bring the whole DF segment of the Locations DF:
+        locations_for_search = locations_copy.iloc[:,available_aisles]
+        #Create a random aisle :
+        rand_aisle = random.randint(1, 15) if locations_for_search.shape[1] == 15 else (random.randint(15, 40) if locations_for_search.shape[1] == 25 else (random.randint(40, 50) if locations_for_search.shape[1] == 10 else print("error")))
+        #Bring a random position:
+        rand_pos = random.randint(0, 19)
+        #Check if there´s any pallet inside the location, or the product is the same:
+        kind_type = locations_copy.at[rand_pos, f"aisle{rand_aisle}"][3]
+        # Find the available spaces in the random position:
+        available_spaces = locations_copy.at[rand_pos, f"aisle{rand_aisle}"][1] - locations_copy.at[rand_pos, f"aisle{rand_aisle}"][0]
+        # Order to allocate:
+        quantity_order = int(orders_df.loc[orders_df["id_orders"] == order, "quantity"].tolist()[0])
+        if available_spaces == 0 or (kind_type != [0,0] and kind_type != [rand_pos,rand_aisle]):
+            continue
+        elif available_spaces > 0 and (kind_type == [rand_pos,rand_aisle] or kind_type == [0,0]):
+                # This message will display for the driver who it´s going allocate the pallet:
+                print(f"Please, go to aisle {rand_aisle}, position {rand_pos}.")
+                #I started a new loop here to check if the code in location is right or not:
+                correct_code = True
+                while correct_code:
+                    code = locations_copy.at[rand_pos, f"aisle{rand_aisle}"][4]
+                    # This message in real life will not appear, because the drive needs to drive to the location to check it self the code:
+                    print(f"The code is: {code}")
+                    input_code = input("Please enter the code: ")
+                    if code != input_code:
+                        #If the code its different its going to re-loop the while parte just for getting the correct answer:
+                        continue
+                    else:
+                        #Here I´ll say the high number of pallets that can be stacked:
+                        stacked = locations_copy.at[rand_pos, f"aisle{rand_aisle}"][2]
+                        print(f"The max number of pallets that can be stacked are: {stacked}")
+                        #Here are two different options, the space in the location is enough, or its not.
+                        if available_spaces < quantity_order:
+                            #Change the quantity of the location to their max:
+                            locations_copy.at[rand_pos, f"aisle{rand_aisle}"][0] = locations_copy.at[rand_pos, f"aisle{rand_aisle}"][1]
+                            quantity_order -= available_spaces
+
+
+
+                    correct_code = False
+
+print("final", locations_copy)
 
 
 
 
+"""
+
+            code = locations_copy.iat[rand_pos,rand_aisle][3]
+            input_code = input("Please enter the code: ")
+
+                print("The code is wrong.")
+                continue
+            #If the code is correct:
+            else:
+                correct_code = False
+                if quantity_order > available_spaces:
+
+                    print("antes",locations_copy.iat[rand_pos, rand_aisle])
+                    locations_copy.iat[rand_pos,rand_aisle][0] = locations_copy.iat[rand_pos,rand_aisle][1]
+                    print("despues", locations_copy.iat[rand_pos, rand_aisle])
+
+
+                    spaces = False
+
+
+
+
+
+
+
+
+
+    
+
+
+    print(available_spaces)
 
 
 
@@ -101,7 +191,9 @@ def call_functions():
 #Call function:
 random_locations, spaces, sum_spaces = call_functions()
 
-"""
+
+
+
 #esto es una prueba:
 print("antes",orders_quantity)
 print("antes",sum_spaces)
@@ -109,7 +201,7 @@ orders_quantity[0] = 0
 sum_spaces = gen_sum_spaces(orders_quantity)
 print("despues",orders_quantity)
 print("despues",sum_spaces)
-"""
+
 
 
 #create a DF where every changes will be added:
@@ -118,6 +210,9 @@ changes_to_location = pd.DataFrame(columns = ["location","aisle","changes"])
 mix_spaces = list(zip(orders_quantity, spaces, random_locations))
 #Here I create an count that will be increase one by one to know which iterable number im in:
 count = 0
+
+
+
 for i in mix_spaces:
     #Here i can check if there are spaces available into the location:
     if i[1] > 0:
@@ -162,4 +257,4 @@ changes_to_location.to_csv("changes_history.csv",mode ="a", header = False , ind
 
 
 
-
+"""

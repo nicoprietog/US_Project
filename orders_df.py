@@ -10,14 +10,12 @@ orders_dict = {
     "name": [],
     "last_name": [],
     "email": [],
-    "city": [],
-    "company_type": [],
     "kind": [],
     "type": [],
     "quantity": []}
 
 #This will be the DataFrame that save all orders in time:
-orders_df = pd.DataFrame(columns=["id_buyer","date","name","last_name","email","city","company_type","kind","type","quantity"])
+orders_df = pd.DataFrame(columns=["id_buyer","date","name","last_name","email","kind","type","quantity"])
 
 #Here i´ll ask what´s the personal user information is:
 print("To continue, please provide your personal information next:")
@@ -26,9 +24,6 @@ name_order = input("Please provide your name: ")
 last_name = input("Please enter your last name: ")
 id_buyer = input("Please provide your Id: ")
 email = input("please enter your email: ")
-city = input("Please provide your location City")
-company_type = input("Please enter the type of company you work for. If you don't belong to any company, enter the word -Self-. ")
-
 
 #Here I´ll ask information about what the user needs:
 active_purchase = True
@@ -40,22 +35,21 @@ while active_purchase:
     q_product = int(input("How many units do you need?" ))
 
     #Save the actual order into the DF:
-    new_row = { "id_buyer": id_buyer,
+    new_row_orders = { "id_buyer": id_buyer,
                 "date": date_today,
                 "name": name_order,
                 "last_name": last_name,
                 "email": email,
-                "city": city,
-                "company_type": company_type,
                 "kind": kind_product,
                 "type": type_product,
-                "quantity": q_product}
+                "quantity": q_product,
+                "allocated":"N"}
 
     #Make this new row a DF:
-    new_row_df = pd.DataFrame([new_row])
+    new_row_orders_df = pd.DataFrame([new_row_orders])
 
     #Concat both df´s:
-    orders_df = pd.concat([orders_df,new_row_df])
+    orders_df = pd.concat([orders_df,new_row_orders_df])
 
     #Ask if the user need another order:
     status_order = int(input("You want to place another order?: Yes[1] No[2]"))

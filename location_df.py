@@ -19,8 +19,10 @@ for i in range(1, aisle_num + 1):
     max_height = (2 if i <= 15 else (4 if i > 15 and i <= 40 else 2))
     #random code:
     random_confirmation_code = []
+    #The actual kind and type of product storaged into the location:
+    kind_type = [0,0]
     #Create a list with the last 4 data(Actual pallet number, Max pallet allowed, Height, Random code):
-    list_data.append([actual_number_pallets,max_pallets,max_height,random_confirmation_code])
+    list_data.append([actual_number_pallets,max_pallets,max_height,kind_type,random_confirmation_code])
 
 # Create the DataFrame from the tuple_data, just the first row:
 initial_locations_df = pd.DataFrame([list_data], columns=columns_names)
@@ -41,3 +43,5 @@ def random_code(lst):
 
 #Apply the function to every column:
 final_locations_df = final_locations_df.applymap(lambda x: random_code(x))
+
+
